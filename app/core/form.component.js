@@ -16,13 +16,18 @@ const product_model_1 = require("../model/product.model");
 const repository_model_1 = require("../model/repository.model");
 const sharedState_model_1 = require("./sharedState.model");
 const Observable_1 = require("rxjs/Observable");
+require("rxjs/add/operator/filter");
+require("rxjs/add/operator/map");
+require("rxjs/add/operator/distinctUntilChanged");
+require("rxjs/add/operator/skipWhile");
 let FormComponent = class FormComponent {
     constructor(model, stateEvents) {
         this.model = model;
         this.stateEvents = stateEvents;
         this.product = new product_model_1.Product();
         this.editing = false;
-        stateEvents.subscribe((update) => {
+        stateEvents
+            .subscribe(update => {
             this.product = new product_model_1.Product();
             if (update.id != undefined) {
                 Object.assign(this.product, this.model.getProduct(update.id));

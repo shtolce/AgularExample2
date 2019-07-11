@@ -12,6 +12,7 @@ const core_1 = require("@angular/core");
 const platform_browser_1 = require("@angular/platform-browser");
 const message_component_1 = require("./message.component");
 const message_service_1 = require("./message.service");
+const errorHandler_component_1 = require("./errorHandler.component");
 let MessageModule = class MessageModule {
 };
 MessageModule = __decorate([
@@ -19,7 +20,8 @@ MessageModule = __decorate([
         imports: [platform_browser_1.BrowserModule],
         declarations: [message_component_1.MessageComponent],
         exports: [message_component_1.MessageComponent],
-        providers: [message_service_1.MessageService]
+        providers: [message_service_1.MessageService,
+            { provide: core_1.ErrorHandler, useClass: errorHandler_component_1.MessageErrorHandler }]
     }), 
     __metadata('design:paramtypes', [])
 ], MessageModule);

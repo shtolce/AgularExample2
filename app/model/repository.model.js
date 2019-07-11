@@ -9,13 +9,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 const core_1 = require("@angular/core");
-const static_datasource_1 = require("./static.datasource");
+const rest_datasource_1 = require("./rest.datasource");
 let Model = class Model {
     constructor(dataSource) {
         this.dataSource = dataSource;
-        this.locator = (p, id) => p.id == id;
         this.products = new Array();
-        this.dataSource.getData().forEach(p => this.products.push(p));
+        this.locator = (p, id) => p.id == id;
+        this.dataSource.getData().subscribe(data => this.products = data);
     }
     getProducts() {
         return this.products;
@@ -25,20 +25,24 @@ let Model = class Model {
     }
     saveProduct(product) {
         if (product.id == 0 || product.id == null) {
-            product.id = this.generateID();
-            this.products.push(product);
+            this.dataSource.saveProduct(product)
+                .subscribe(p => this.products.push(p));
         }
         else {
-            let index = this.products
-                .findIndex(p => this.locator(p, product.id));
-            this.products.splice(index, 1, product);
+            this.dataSource.updateProduct(product).subscribe(p => {
+                let index = this.products
+                    .findIndex(item => this.locator(item, p.id));
+                this.products.splice(index, 1, p);
+            });
         }
     }
     deleteProduct(id) {
-        let index = this.products.findIndex(p => this.locator(p, id));
-        if (index > -1) {
-            this.products.splice(index, 1);
-        }
+        this.dataSource.deleteProduct(id).subscribe(() => {
+            let index = this.products.findIndex(p => this.locator(p, id));
+            if (index > -1) {
+                this.products.splice(index, 1);
+            }
+        });
     }
     generateID() {
         let candidate = 100;
@@ -50,6 +54,6 @@ let Model = class Model {
 };
 Model = __decorate([
     core_1.Injectable(), 
-    __metadata('design:paramtypes', [static_datasource_1.StaticDataSource])
+    __metadata('design:paramtypes', [rest_datasource_1.RestDataSource])
 ], Model);
 exports.Model = Model;
