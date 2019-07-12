@@ -10,18 +10,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 const core_1 = require("@angular/core");
 const platform_browser_1 = require("@angular/platform-browser");
-const model_module_1 = require("./model/model.module");
 const core_module_1 = require("./core/core.module");
-const table_component_1 = require("./core/table.component");
-const form_component_1 = require("./core/form.component");
 const message_module_1 = require("./messages/message.module");
-const message_component_1 = require("./messages/message.component");
+const app_routing_1 = require("./app.routing");
+const app_component_1 = require("./app.component");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     core_1.NgModule({
-        imports: [platform_browser_1.BrowserModule, model_module_1.ModelModule, core_module_1.CoreModule, message_module_1.MessageModule],
-        bootstrap: [table_component_1.TableComponent, form_component_1.FormComponent, message_component_1.MessageComponent]
+        imports: [platform_browser_1.BrowserModule, core_module_1.CoreModule, message_module_1.MessageModule, app_routing_1.routing],
+        declarations: [app_component_1.AppComponent],
+        bootstrap: [app_component_1.AppComponent]
     }), 
     __metadata('design:paramtypes', [])
 ], AppModule);

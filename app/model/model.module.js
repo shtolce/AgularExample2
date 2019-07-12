@@ -9,13 +9,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 const core_1 = require("@angular/core");
-const static_datasource_1 = require("./static.datasource");
+const http_1 = require("@angular/http");
 const repository_model_1 = require("./repository.model");
+const rest_datasource_1 = require("./rest.datasource");
 let ModelModule = class ModelModule {
 };
 ModelModule = __decorate([
     core_1.NgModule({
-        providers: [repository_model_1.Model, static_datasource_1.StaticDataSource]
+        imports: [http_1.HttpModule, http_1.JsonpModule],
+        providers: [repository_model_1.Model, rest_datasource_1.RestDataSource,
+            { provide: rest_datasource_1.REST_URL, useValue: `http://${location.hostname}:3500/products`
+            }]
     }), 
     __metadata('design:paramtypes', [])
 ], ModelModule);

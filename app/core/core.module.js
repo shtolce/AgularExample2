@@ -14,31 +14,18 @@ const forms_1 = require("@angular/forms");
 const model_module_1 = require("../model/model.module");
 const table_component_1 = require("./table.component");
 const form_component_1 = require("./form.component");
-const sharedState_model_1 = require("./sharedState.model");
-const Subject_1 = require("rxjs/Subject");
 const state_pipe_1 = require("./state.pipe");
 const message_module_1 = require("../messages/message.module");
-const message_service_1 = require("../messages/message.service");
-const message_model_1 = require("../messages/message.model");
-const repository_model_1 = require("../model/repository.model");
-const sharedState_model_2 = require("./sharedState.model");
+//import { MODES } from "./sharedState.model";
+const router_1 = require("@angular/router");
 let CoreModule = class CoreModule {
 };
 CoreModule = __decorate([
     core_1.NgModule({
-        imports: [platform_browser_1.BrowserModule, forms_1.FormsModule, model_module_1.ModelModule, message_module_1.MessageModule],
+        imports: [platform_browser_1.BrowserModule, forms_1.FormsModule, model_module_1.ModelModule, message_module_1.MessageModule,
+            router_1.RouterModule],
         declarations: [table_component_1.TableComponent, form_component_1.FormComponent, state_pipe_1.StatePipe],
         exports: [model_module_1.ModelModule, table_component_1.TableComponent, form_component_1.FormComponent],
-        providers: [{
-                provide: sharedState_model_1.SHARED_STATE,
-                deps: [message_service_1.MessageService, repository_model_1.Model],
-                useFactory: (messageService, model) => {
-                    let subject = new Subject_1.Subject();
-                    subject.subscribe(m => messageService.reportMessage(new message_model_1.Message(sharedState_model_2.MODES[m.mode] + (m.id != undefined
-                        ? ` ${model.getProduct(m.id).name}` : ""))));
-                    return subject;
-                }
-            }]
     }), 
     __metadata('design:paramtypes', [])
 ], CoreModule);
