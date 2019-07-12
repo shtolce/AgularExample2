@@ -8,38 +8,36 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
 const core_1 = require("@angular/core");
 const product_model_1 = require("../model/product.model");
 const repository_model_1 = require("../model/repository.model");
-const sharedState_model_1 = require("./sharedState.model");
-const Observable_1 = require("rxjs/Observable");
-require("rxjs/add/operator/filter");
-require("rxjs/add/operator/map");
-require("rxjs/add/operator/distinctUntilChanged");
-require("rxjs/add/operator/skipWhile");
+//import { MODES, SharedState,SHARED_STATE  } from "./sharedState.model";
+//import { Observable } from "rxjs/Observable";
+//import "rxjs/add/operator/filter";
+//import "rxjs/add/operator/map";
+//import "rxjs/add/operator/distinctUntilChanged";
+//import "rxjs/add/operator/skipWhile";
+const router_1 = require("@angular/router");
 let FormComponent = class FormComponent {
-    constructor(model, stateEvents) {
+    constructor(model, activeRoute, router) {
         this.model = model;
-        this.stateEvents = stateEvents;
+        this.router = router;
         this.product = new product_model_1.Product();
         this.editing = false;
-        stateEvents
-            .subscribe(update => {
-            this.product = new product_model_1.Product();
-            if (update.id != undefined) {
-                Object.assign(this.product, this.model.getProduct(update.id));
+        activeRoute.params.subscribe(params => {
+            this.editing = params["mode"] == "edit";
+            let id = params["id"];
+            if (id != null) {
+                Object.assign(this.product, model.getProduct(id) || new product_model_1.Product());
             }
-            this.editing = update.mode == sharedState_model_1.MODES.EDIT;
         });
     }
     submitForm(form) {
         if (form.valid) {
             this.model.saveProduct(this.product);
-            this.product = new product_model_1.Product();
-            form.reset();
+            //this.product = new Product();
+            //form.reset();
+            this.router.navigateByUrl("/");
         }
     }
     resetForm() {
@@ -52,8 +50,7 @@ FormComponent = __decorate([
         //moduleId: module.id,
         templateUrl: "../../form.component.html",
         styleUrls: ["../../form.component.css"]
-    }),
-    __param(1, core_1.Inject(sharedState_model_1.SHARED_STATE)), 
-    __metadata('design:paramtypes', [repository_model_1.Model, Observable_1.Observable])
+    }), 
+    __metadata('design:paramtypes', [repository_model_1.Model, router_1.ActivatedRoute, router_1.Router])
 ], FormComponent);
 exports.FormComponent = FormComponent;

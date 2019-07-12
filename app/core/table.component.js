@@ -8,31 +8,33 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
 const core_1 = require("@angular/core");
 const repository_model_1 = require("../model/repository.model");
-const sharedState_model_1 = require("./sharedState.model");
+//import { MODES, SharedState, SHARED_STATE } from "./sharedState.model";
+//import { Observer } from "rxjs/Observer";
+const router_1 = require("@angular/router");
 let TableComponent = class TableComponent {
-    constructor(model, observer) {
+    constructor(model, activeRoute) {
         this.model = model;
-        this.observer = observer;
+        this.category = null;
+        activeRoute.params.subscribe(params => {
+            this.category = params["category"] || null;
+        });
     }
     getProduct(key) {
         return this.model.getProduct(key);
     }
     getProducts() {
-        return this.model.getProducts();
+        return this.model.getProducts()
+            .filter(p => this.category == null || p.category == this.category);
+    }
+    get categories() {
+        return this.model.getProducts()
+            .map(p => p.category)
+            .filter((category, index, array) => array.indexOf(category) == index);
     }
     deleteProduct(key) {
         this.model.deleteProduct(key);
-    }
-    editProduct(key) {
-        this.observer.next(new sharedState_model_1.SharedState(sharedState_model_1.MODES.EDIT, key));
-    }
-    createProduct() {
-        this.observer.next(new sharedState_model_1.SharedState(sharedState_model_1.MODES.CREATE));
     }
 };
 TableComponent = __decorate([
@@ -40,8 +42,7 @@ TableComponent = __decorate([
         selector: "paTable",
         //moduleId: module.id,
         templateUrl: "../../table.component.html"
-    }),
-    __param(1, core_1.Inject(sharedState_model_1.SHARED_STATE)), 
-    __metadata('design:paramtypes', [repository_model_1.Model, Object])
+    }), 
+    __metadata('design:paramtypes', [repository_model_1.Model, router_1.ActivatedRoute])
 ], TableComponent);
 exports.TableComponent = TableComponent;

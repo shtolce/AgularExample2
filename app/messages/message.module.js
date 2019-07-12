@@ -13,11 +13,12 @@ const platform_browser_1 = require("@angular/platform-browser");
 const message_component_1 = require("./message.component");
 const message_service_1 = require("./message.service");
 const errorHandler_component_1 = require("./errorHandler.component");
+const router_1 = require("@angular/router");
 let MessageModule = class MessageModule {
 };
 MessageModule = __decorate([
     core_1.NgModule({
-        imports: [platform_browser_1.BrowserModule],
+        imports: [platform_browser_1.BrowserModule, router_1.RouterModule],
         declarations: [message_component_1.MessageComponent],
         exports: [message_component_1.MessageComponent],
         providers: [message_service_1.MessageService,
